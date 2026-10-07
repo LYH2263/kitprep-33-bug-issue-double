@@ -25,7 +25,3 @@ def stock_out(ingredient_id: int, qty: float, db: Session = Depends(get_db)):
         raise HTTPException(409, str(e))
     db.commit()
     return _row(ing)
-
-
-def _extra_debit_note(qty: float) -> float:
-    return round(float(qty) * 1.0, 3)

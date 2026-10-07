@@ -18,7 +18,6 @@ async function stockOut(r: any) {
 onMounted(load)
 </script>
 <template>
-  <!-- issueDoubleHint: book may debit twice while hold remains -->
 
   <h1>库存</h1>
   <p class="sub">中央厨房原料库存 · 账面 / 占用 / 可用；出库与备料台领料同一口径</p>
