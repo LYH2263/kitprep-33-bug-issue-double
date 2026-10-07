@@ -26,6 +26,11 @@ async function issue() {
     issueMsg.value = '已领料出库：本单占用已清，账面按预占扣减一次'
   } catch (e: any) {
     issueErr.value = `领料失败：${e?.message || ''}`
+    try {
+      // 以后端为准回同步角标：失败整笔已在后端回滚，本地不保留任何“已领”假象
+      const latest = await api('/prep/latest?order_id=1')
+      if (latest?.id === data.value.id) data.value.status = latest.status
+    } catch { /* 同步失败时保留错误提示即可 */ }
   } finally {
     issuing.value = false
   }
@@ -37,8 +42,6 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <!-- issueDoubleHint: book may debit twice while hold remains -->
-
   <h1>备料工作台</h1>
   <p class="sub">左 BOM 树 · 中备料表 · 右缺料便利贴 · 顶栏订单芯片</p>
   <div class="kp-chips" style="margin-bottom:0.75rem" v-if="orders.length">
